@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, inject} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild, inject} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
@@ -6,7 +6,11 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TableService, userData } from './table.service';
-
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button'; 
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { UsersComponent } from "../users/users.component";
 /**
  * @title Table with pagination
  */
@@ -19,23 +23,27 @@ import { TableService, userData } from './table.service';
              FormsModule,
              RouterModule, 
              MatSortModule,
+             MatIconModule,
+             MatButtonModule,
+             MatTooltipModule,
+             MatDialogModule
             ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements  AfterViewInit {
   constructor(private apiservice:TableService){}
+  readonly dialog = inject(MatDialog);
   private _liveAnnouncer = inject(LiveAnnouncer);
   term!: "";
   dataSource!:any;
   user_data!: userData[];
-  displayedColumns: string[] = ['name', 'email', 'phoneNo','edit'];
+  displayedColumns: string[] = ['name', 'email', 'phoneNo','action'];
+
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
   
   @ViewChild(MatSort) sort!: MatSort;
   
-  ngOnInit(): void {
-    this.fetchUser();
-  }
   
   fetchUser(){
     this.apiservice.getAllData().subscribe((data)=>{
@@ -45,9 +53,36 @@ export class TableComponent implements OnInit {
       this.dataSource.sort = this.sort;
     })
   }
+  
+  ngAfterViewInit(): void {
+    this.fetchUser(); 
+  }
+  edit(element:any){
+    this.apiservice.editUser(element._id,element).subscribe((data)=>{
+      console.log("edit Content",data);
+      this.fetchUser(); 
+    })
 
-  edit(){
+    const dialogRef = this.dialog.open(EditDialog);
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+
+  }
+
+  onView(element:any){
+    this.apiservice.viewUser(element._id).subscribe((data)=>{
+      console.log("view Content",data);
+      this.fetchUser(); 
+    })
+  }
+
+  onDelete(element:any){
+    this.apiservice.deleteUser(element._id).subscribe((data)=>{
+      console.log("Deleted Content",data);
+      this.fetchUser(); 
+    })
   }
   /** Announce the change in sort state for assistive technology. */
   announceSortChange(sortState: Sort) {
@@ -61,5 +96,13 @@ export class TableComponent implements OnInit {
       this._liveAnnouncer.announce('Sorting cleared');
     }
   }
-
 }
+
+  @Component({
+    selector: 'edit.component',
+    templateUrl: 'edit.component.html',
+    imports: [MatDialogModule, MatButtonModule, UsersComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+  })
+  export class EditDialog {}
+  
