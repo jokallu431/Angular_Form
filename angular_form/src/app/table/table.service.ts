@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export interface userData{
-    id:string,
+export interface userData{userdata:[
     name: string,
     email: string,
     phoneNo: string,
+]
 }
 
 @Injectable({
@@ -27,7 +27,8 @@ export class TableService {
    }
 
    viewUser(id:any):Observable<userData[]>{
-    return this.http.get<userData[]>(this.apiUrlID+id)
+     const data = this.http.get<userData[]>(this.apiUrlID+id)
+     return data;
    }
 
    editUser(id:any,body:any):Observable<userData[]>{

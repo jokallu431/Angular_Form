@@ -11,11 +11,8 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-Webpack:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "customWebpackConfig": {
-              "path": "src/custom-webpack.config.ts"
-            },
             "outputPath": "dist/angular_form",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -31,7 +28,7 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/rose-red.css",
+              "@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
@@ -62,7 +59,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "angular_form:build:production"
@@ -94,7 +91,7 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/rose-red.css",
+              "@angular/material/prebuilt-themes/cyan-orange.css",
               "src/styles.css"
             ],
             "scripts": [],
