@@ -11,9 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-/**
- * @title Table with pagination
- */
+
 @Component({
   selector: 'table-pagination-example',
   styleUrl: './table.component.css',
@@ -27,28 +25,30 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatButtonModule,
     MatTooltipModule,
     MatDialogModule,
-    
+
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class TableComponent implements AfterViewInit {
+
   constructor(private apiservice: TableService,
-              private router: Router, 
+    private router: Router,
   ) { }
-  private _snackBar = inject(MatSnackBar);
+
   private _liveAnnouncer = inject(LiveAnnouncer);
+  private _snackBar = inject(MatSnackBar);
   readonly dialog = inject(MatDialog);
+
   title = 'Users Table';
-  term!: "";
+
   dataSource!: any;
   user_data!: userData[];
-  displayedColumns: string[] = ['id','name', 'email', 'phoneNo', 'action'];
-  
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-  
+  displayedColumns: string[] = ['id', 'name', 'email', 'phoneNo', 'action'];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  
+
   fetchUser() {
     this.apiservice.getAllData().subscribe((data) => {
       this.user_data = data;
@@ -57,14 +57,17 @@ export class TableComponent implements AfterViewInit {
       this.dataSource.sort = this.sort;
     })
   }
-  
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   ngAfterViewInit(): void {
     this.fetchUser();
   }
-   
+
   edit(element: any) {
-    console.log("Edit Content", element._id);
-    console.log("Edit Content", element);
     this.router.navigate(['/edit', element]);
   }
   onView(element: any) {
@@ -78,11 +81,9 @@ export class TableComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       if (result === true) {
-        this.apiservice.viewUser(element._id).subscribe((data) => {
-          console.log("view Content", data);
-          this._snackBar.open('User Details','close',{
+        this.apiservice.viewUser(element._id).subscribe(() => {
+          this._snackBar.open('User Details', 'close', {
             duration: 3000
           });
           this.fetchUser();
@@ -90,16 +91,13 @@ export class TableComponent implements AfterViewInit {
       }
     });
   }
-  
+
   onDelete(element: any) {
     const dialogRef = this.dialog.open(ModalDialog);
-    
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       if (result === true) {
-        this.apiservice.deleteUser(element._id).subscribe((data) => {
-          console.log("Deleted Content", data);
-          this._snackBar.open('User Deleted','close',{
+        this.apiservice.deleteUser(element._id).subscribe(() => {
+          this._snackBar.open('User Deleted', 'close', {
             duration: 3000
           });
           this.fetchUser();
@@ -107,12 +105,7 @@ export class TableComponent implements AfterViewInit {
       }
     });
   }
-  /** Announce the change in sort state for assistive technology. */
   announceSortChange(sortState: Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
@@ -137,14 +130,12 @@ export class ModalDialog { }
   imports: [MatDialogModule, MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ViewModalDialog { 
+export class ViewModalDialog {
   constructor(
     public dialogRef: MatDialogRef<ViewModalDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
-
-  // Close the dialog
   closeDialog() {
     this.dialogRef.close();
   }
- }
+}

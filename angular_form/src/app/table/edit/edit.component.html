@@ -1,9 +1,21 @@
-<!-- <form class="example-form" (ngSubmit)="handleSubmit(profileForm.value)" [formGroup]="profileForm">
-  <mat-form-field class="example-full-width">
-    <mat-label>Name</mat-label>
-    <input type="text" matInput formControlName="name"  [errorStateMatcher]="matcher"
-           placeholder="Ex. John ">
-    @if (!profileForm.get('name')?.valid && !profileForm.get('name')?.hasError('required')) {
+<div class="container">
+  <h1>{{ title }}</h1>
+  <form
+    class="example-form"
+    (ngSubmit)="handleSubmit(profileForm.value)"
+    [formGroup]="profileForm"
+  >
+    <mat-form-field class="example-full-width">
+      <mat-label>Name</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="name"
+        [errorStateMatcher]="matcher"
+        placeholder="Ex. John "
+      />
+      @if (!profileForm.get('name')?.valid &&
+      !profileForm.get('name')?.hasError('required')) {
       <mat-error>Please enter a valid Name</mat-error>
       } @if (profileForm.get('name')?.hasError('required')) {
       <mat-error>Name is <strong>required</strong></mat-error>
@@ -41,31 +53,8 @@
       <mat-error>Please enter a valid Phone No</mat-error>
       } @if (profileForm.get('phoneNo')?.hasError('required')) {
       <mat-error>PhoneNo is <strong>required</strong></mat-error>
-    }
-  </mat-form-field>
-      <button [disabled]="profileForm.invalid" mat-raised-button>Update</button>
-</form> -->
-<div class="container">
-  <h2>Edit User</h2>
-  <form (ngSubmit)="updateUser()">
-    <mat-form-field appearance="fill" class="form-group">
-      <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="userData.name" name="name" required>
+      }
     </mat-form-field>
-
-    <mat-form-field appearance="fill" class="form-group">
-      <mat-label>Email</mat-label>
-      <input matInput type="email" [(ngModel)]="userData.email" name="email" required>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="form-group">
-      <mat-label>Phone No</mat-label>
-      <input matInput [(ngModel)]="userData.phoneNo" name="phoneNo" required>
-    </mat-form-field>
-
-    <div class="form-actions">
-      <button mat-raised-button color="primary" type="submit">Save Changes</button>
-      <!-- <button mat-button type="button" (click)="router.navigate(['/'])">Cancel</button> -->
-    </div>
+    <button [disabled]="profileForm.invalid" mat-raised-button>Update</button>
   </form>
 </div>
