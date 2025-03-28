@@ -34,7 +34,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrl: './users.component.css'
 })
 export class UsersComponent {
-  title = 'Angular_Task';
+  title = 'Create User';
   private _snackBar = inject(MatSnackBar);
   matcher = new MyErrorStateMatcher();
   profileForm = new FormGroup({

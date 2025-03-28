@@ -37,18 +37,17 @@ export class TableComponent implements AfterViewInit {
   constructor(private apiservice: TableService) { }
   private _liveAnnouncer = inject(LiveAnnouncer);
   readonly dialog = inject(MatDialog);
-  title = 'Angular_Task';
+  title = 'Users Table';
   term!: "";
   dataSource!: any;
   user_data!: userData[];
   displayedColumns: string[] = ['id','name', 'email', 'phoneNo', 'action'];
-
+  
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
-
+  
   @ViewChild(MatSort) sort!: MatSort;
-
-
+  
   fetchUser() {
     this.apiservice.getAllData().subscribe((data) => {
       this.user_data = data;
@@ -57,11 +56,11 @@ export class TableComponent implements AfterViewInit {
       this.dataSource.sort = this.sort;
     })
   }
-
+  
   ngAfterViewInit(): void {
     this.fetchUser();
   }
-   edit(element: any) {
+  edit(element: any) {
     console.log("element ",element);
     
     this.apiservice.editUser(element, element).subscribe((data) => {
@@ -70,17 +69,17 @@ export class TableComponent implements AfterViewInit {
     })
     
   }
-
+  
   onView(element: any) {
     this.apiservice.viewUser(element._id).subscribe((data) => {
       console.log("view Content", data);
       this.fetchUser();
     })
   }
-
+  
   onDelete(element: any) {
     const dialogRef = this.dialog.open(ModalDialog);
-
+    
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
       if (result === true) {

@@ -33,6 +33,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrl: './edit.component.css'
 })
 export class EditComponent {
+  title = 'Update User';
   matcher = new MyErrorStateMatcher();
     profileForm = new FormGroup({
       name : new FormControl('', [Validators.required,Validators.minLength(3)]),
