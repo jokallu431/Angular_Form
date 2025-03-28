@@ -35,7 +35,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class UsersComponent {
   title = 'Create User';
-  private _snackBar = inject(MatSnackBar);
+  private snackBar = inject(MatSnackBar);
   matcher = new MyErrorStateMatcher();
   profileForm = new FormGroup({
     name : new FormControl('', [Validators.required,Validators.minLength(3)]),
@@ -49,13 +49,11 @@ export class UsersComponent {
     this.service.postData(data).subscribe(() => {
       console.log("result", data);
       if (data) {
-        
-        // [routerLink]="['/table']" routerLinkActive="router-link-active" 
         this.router.navigate(['/table']);
-         this._snackBar.open('User Created','close',{
-          duration: 3000
-        });
-        // snackBarRef.dismiss();
+          this.snackBar.open("User Created Successfully", "OK", {
+            duration: 3000,
+            panelClass: ['green-snackbar', 'login-snackbar'],
+           });
       }
     });
   }

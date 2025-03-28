@@ -17,6 +17,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltip } from '@angular/material/tooltip';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -29,7 +30,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 @Component({
   selector: 'app-edit',
-  imports: [ReactiveFormsModule,FormsModule,MatButtonModule, MatDividerModule, MatIconModule, MatFormFieldModule, MatInputModule,CommonModule],
+  imports: [ReactiveFormsModule,FormsModule,MatButtonModule, MatDividerModule, MatIconModule, MatFormFieldModule, MatInputModule,CommonModule,MatTooltip],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.css'
 })
@@ -59,6 +60,7 @@ export class EditComponent implements OnInit {
   fetchUser() {
     this.apiservice.viewUser(this.userId).subscribe((data) => {
       this.userData = data;  
+      //Setting Value for FormGroup
       this.profileForm.setValue({
         name: `${this.userData.name}`,
         email: `${this.userData.email}`,

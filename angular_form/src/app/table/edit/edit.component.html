@@ -55,6 +55,11 @@
       <mat-error>PhoneNo is <strong>required</strong></mat-error>
       }
     </mat-form-field>
-    <button [disabled]="profileForm.invalid" mat-raised-button>Update</button>
+    <button 
+    [disabled]="profileForm.invalid" 
+    mat-raised-button 
+    color="primary"
+    matTooltip="Update User"
+    >Update</button>
   </form>
 </div>

@@ -8,7 +8,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TableService, userData } from './table.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -41,28 +41,30 @@ export class TableComponent implements AfterViewInit {
   readonly dialog = inject(MatDialog);
 
   title = 'Users Table';
-
   dataSource!: any;
   user_data!: userData[];
-  displayedColumns: string[] = ['id', 'name', 'email', 'phoneNo', 'action'];
+  index=1;
 
+  displayedColumns: string[] = ['SrNo', 'name', 'email', 'phoneNo', 'action'];
+  
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
+  
   fetchUser() {
     this.apiservice.getAllData().subscribe((data) => {
       this.user_data = data;
+      this.index=this.user_data.length;
       this.dataSource = new MatTableDataSource(this.user_data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     })
   }
-
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase(); 
   }
-
+  
   ngAfterViewInit(): void {
     this.fetchUser();
   }
@@ -80,12 +82,13 @@ export class TableComponent implements AfterViewInit {
       }
     });
 
+    this._snackBar.open("View User ", "OK", {
+      duration: 3000,
+      panelClass: ['green-snackbar', 'login-snackbar'],
+     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         this.apiservice.viewUser(element._id).subscribe(() => {
-          this._snackBar.open('User Details', 'close', {
-            duration: 3000
-          });
           this.fetchUser();
         })
       }
@@ -97,9 +100,10 @@ export class TableComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         this.apiservice.deleteUser(element._id).subscribe(() => {
-          this._snackBar.open('User Deleted', 'close', {
-            duration: 3000
-          });
+          this._snackBar.open("User Deleted Successfully", "OK", {
+            duration: 3000,
+            panelClass: ['red-snackbar', 'login-snackbar'],
+           });
           this.fetchUser();
         })
       }
@@ -117,7 +121,7 @@ export class TableComponent implements AfterViewInit {
 @Component({
   selector: 'modal.component',
   templateUrl: 'modal.component.html',
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule,MatTooltip],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalDialog { }
@@ -127,7 +131,7 @@ export class ModalDialog { }
   selector: 'app-view-user-dialog',
   styleUrl: './table.component.css',
   templateUrl: './View.component.html',
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule,MatTooltip],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewModalDialog {

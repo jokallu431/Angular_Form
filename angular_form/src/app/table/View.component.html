@@ -5,5 +5,9 @@
   <p><strong>Phone No:</strong> {{ data.phoneNo }}</p>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="closeDialog()">Close</button>
+  <button  
+  mat-raised-button 
+  color="primary"
+  matTooltip="Close"
+  (click)="closeDialog()">Close</button>
 </mat-dialog-actions>
