@@ -12,13 +12,8 @@ export const routes: Routes = [
         title:'Table_Page'
     },
     {
-        path:'edit',
+        path:'edit/:id',
         loadComponent:()=> import ('./table/edit/edit.component').then((c)=>c.EditComponent),
         title:'Edit_Page'
-    },
-    {
-        path:'view',
-        loadComponent:()=> import ('./table/view/view.component').then((c)=>c.ViewComponent),
-        title:'View_Page'
     }
 ];
