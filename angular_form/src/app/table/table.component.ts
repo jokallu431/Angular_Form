@@ -48,8 +48,6 @@ export class TableComponent implements AfterViewInit {
   dataSource!: any;
   user_data!: userData[];
   pageNumbers :number[]=[5,10,15];
-  itemPerPage:number=5;
-  totalItems!:number;
   isLoading=true;
   displayedColumns: string[] = ['SrNo', 'name', 'email', 'phoneNo', 'action'];
   
@@ -66,20 +64,9 @@ export class TableComponent implements AfterViewInit {
         this.user_data = data;
         this.dataSource = new MatTableDataSource(this.user_data);
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.calculate();
+        this.dataSource.sort = this.sort; 
       }
     })
-  }
-  calculate(){
-    this.totalItems=Math.ceil(this.user_data.length/this.itemPerPage);
-        console.log("length",this.user_data.length);
-        console.log("total items",this.totalItems);
-        console.log("before cal",this.pageNumbers);
-        for(let i=2;i<=this.totalItems;i++){
-          this.pageNumbers.push(i*5);
-        }
-        console.log("after cal",this.pageNumbers);
   }
 
   applyFilter(event: Event) {
