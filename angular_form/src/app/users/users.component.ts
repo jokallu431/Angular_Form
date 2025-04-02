@@ -20,6 +20,8 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { TableService } from '../table/table.service';
+import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
+import { LoadingComponent } from '../loading/loading.component';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -38,12 +40,16 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
             MatFormFieldModule, 
             MatInputModule,
             CommonModule,
-            MatSnackBarModule],
+            MatSnackBarModule,
+            MatProgressSpinnerModule,
+            LoadingComponent
+          ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
 export class UsersComponent {
   title = 'Create User';
+  isLoading = false;
   private snackBar = inject(MatSnackBar);
   matcher = new MyErrorStateMatcher();
   profileForm = new FormGroup({
@@ -54,7 +60,10 @@ export class UsersComponent {
   
   constructor(private service: UsersService, private router: Router) { }
   handleSubmit(data: any) {
-    this.service.postData(data).subscribe((userdata) => {
+    this.isLoading = true;
+    this.service.postData(data).subscribe({
+      next: (userdata) => {
+        this.isLoading = false;
       if (userdata===null) {
           this.snackBar.open("User Already Exists  ", "OK", {
           duration: 3000,
@@ -67,6 +76,17 @@ export class UsersComponent {
             panelClass: ['green-snackbar', 'login-snackbar'],
            });
       }
+    },
+    error: (err) => {
+      this.isLoading = false;
+        // Handle any errors that occur during the API call
+        console.error("Error during user creation:", err);
+        this.snackBar.open(err.error?.message || "An unexpected error occurred. Please try again.", "OK", {
+            duration: 3000,
+            panelClass: ['red-snackbar', 'login-snackbar'],
+        });
+    }
+
     });
   }
 }

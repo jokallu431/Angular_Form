@@ -126,13 +126,13 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
-  </div>
-  <mat-paginator
-  #paginatorRef
-  set [pageSizeOptions]="pageNumbers"
-  showFirstLastButtons
-  aria-label="Select page of Table"
-  align-end
-  >
+    <mat-paginator
+    #paginatorRef
+    [pageSizeOptions]="pageNumbers"
+    showFirstLastButtons
+    aria-label="Select page of Table"
+    align-end
+    >
   </mat-paginator>
+</div>
 </div>

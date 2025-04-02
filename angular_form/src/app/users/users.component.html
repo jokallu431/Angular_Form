@@ -1,60 +1,66 @@
-<div class="container">
+<div class="container" >
   <h1>{{title}}</h1>
-  <form
-    class="example-form"
-    (ngSubmit)="handleSubmit(profileForm.value)"
-    [formGroup]="profileForm"
-  >
-    <mat-form-field class="example-full-width">
-      <mat-label>Name</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="name"
-        [errorStateMatcher]="matcher"
-        placeholder="Ex. John "
-      />
-      @if (!profileForm.get('name')?.valid &&
-      !profileForm.get('name')?.hasError('required')) {
-      <mat-error>Please enter a valid Name</mat-error>
-      } @if (profileForm.get('name')?.hasError('required')) {
-      <mat-error>Name is <strong>required</strong></mat-error>
+  <div style="position: relative;">
+      @if(isLoading) {
+        <app-loading></app-loading>
       }
-    </mat-form-field>
+    <form
+       class="example-form"
+       (ngSubmit)="handleSubmit(profileForm.value)"
+       [formGroup]="profileForm"
+     >
+       <mat-form-field class="example-full-width">
+         <mat-label>Name</mat-label>
+         <input
+           type="text"
+           matInput
+           formControlName="name"
+           [errorStateMatcher]="matcher"
+           placeholder="Ex. John "
+         />
+         @if (!profileForm.get('name')?.valid &&
+         !profileForm.get('name')?.hasError('required')) {
+         <mat-error>Please enter a valid Name</mat-error>
+         } @if (profileForm.get('name')?.hasError('required')) {
+         <mat-error>Name is <strong>required</strong></mat-error>
+         }
+       </mat-form-field>
+   
+       <mat-form-field class="example-full-width">
+         <mat-label>Email</mat-label>
+         <input
+           type="email"
+           matInput
+           formControlName="email"
+           [errorStateMatcher]="matcher"
+           placeholder="Ex. pat@example.com"
+         />
+         @if (!profileForm.get('email')?.valid &&
+         !profileForm.get('email')?.hasError('required')) {
+         <mat-error>Please enter a valid Email</mat-error>
+         } @if (profileForm.get('email')?.hasError('required')) {
+         <mat-error>Email is <strong>required</strong></mat-error>
+         }
+       </mat-form-field>
+   
+       <mat-form-field class="example-full-width">
+         <mat-label>Phone No</mat-label>
+         <input
+           type="tel"
+           matInput
+           formControlName="phoneNo"
+           [errorStateMatcher]="matcher"
+           placeholder="Ex. 9921364821"
+         />
+         @if (!profileForm.get('phoneNo')?.valid &&
+         !profileForm.get('phoneNo')?.hasError('required')) {
+         <mat-error>Please enter a valid Phone No</mat-error>
+         } @if (profileForm.get('phoneNo')?.hasError('required')) {
+         <mat-error>PhoneNo is <strong>required</strong></mat-error>
+         }
+       </mat-form-field>
+       <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button>
+     </form>
+   </div> 
 
-    <mat-form-field class="example-full-width">
-      <mat-label>Email</mat-label>
-      <input
-        type="email"
-        matInput
-        formControlName="email"
-        [errorStateMatcher]="matcher"
-        placeholder="Ex. pat@example.com"
-      />
-      @if (!profileForm.get('email')?.valid &&
-      !profileForm.get('email')?.hasError('required')) {
-      <mat-error>Please enter a valid Email</mat-error>
-      } @if (profileForm.get('email')?.hasError('required')) {
-      <mat-error>Email is <strong>required</strong></mat-error>
-      }
-    </mat-form-field>
-
-    <mat-form-field class="example-full-width">
-      <mat-label>Phone No</mat-label>
-      <input
-        type="tel"
-        matInput
-        formControlName="phoneNo"
-        [errorStateMatcher]="matcher"
-        placeholder="Ex. 9921364821"
-      />
-      @if (!profileForm.get('phoneNo')?.valid &&
-      !profileForm.get('phoneNo')?.hasError('required')) {
-      <mat-error>Please enter a valid Phone No</mat-error>
-      } @if (profileForm.get('phoneNo')?.hasError('required')) {
-      <mat-error>PhoneNo is <strong>required</strong></mat-error>
-      }
-    </mat-form-field>
-    <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button>
-  </form>
 </div>
