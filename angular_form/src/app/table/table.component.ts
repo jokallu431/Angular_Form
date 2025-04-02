@@ -11,7 +11,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { CommonModule } from '@angular/common';
+import { LoadingComponent } from "../loading/loading.component";
 @Component({
   selector: 'table-pagination-example',
   styleUrl: './table.component.css',
@@ -25,7 +27,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatButtonModule,
     MatTooltipModule,
     MatDialogModule,
-
+    MatProgressSpinnerModule,
+    CommonModule,
+    LoadingComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -43,26 +47,44 @@ export class TableComponent implements AfterViewInit {
   title = 'Users Table';
   dataSource!: any;
   user_data!: userData[];
-  index=1;
-
+  pageNumbers :number[]=[5,10,15];
+  itemPerPage:number=5;
+  totalItems!:number;
+  isLoading=true;
   displayedColumns: string[] = ['SrNo', 'name', 'email', 'phoneNo', 'action'];
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   
-  fetchUser() {
+   fetchUser() {
     this.apiservice.getAllData().subscribe((data) => {
-      this.user_data = data;
-      this.index=this.user_data.length;
-      this.dataSource = new MatTableDataSource(this.user_data);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      
+      if(data.length<=0){
+        this.isLoading=true;
+      }else{
+        this.isLoading=false;
+        this.user_data = data;
+        this.dataSource = new MatTableDataSource(this.user_data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.calculate();
+      }
     })
   }
-  
+  calculate(){
+    this.totalItems=Math.ceil(this.user_data.length/this.itemPerPage);
+        console.log("length",this.user_data.length);
+        console.log("total items",this.totalItems);
+        console.log("before cal",this.pageNumbers);
+        for(let i=2;i<=this.totalItems;i++){
+          this.pageNumbers.push(i*5);
+        }
+        console.log("after cal",this.pageNumbers);
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase(); 
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   
   ngAfterViewInit(): void {
@@ -84,7 +106,7 @@ export class TableComponent implements AfterViewInit {
 
     this._snackBar.open("View User ", "OK", {
       duration: 3000,
-      panelClass: ['green-snackbar', 'login-snackbar'],
+      panelClass: ['green-snackbar'],
      });
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {

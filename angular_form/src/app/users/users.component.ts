@@ -19,6 +19,7 @@ import { UsersService } from './users.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import { TableService } from '../table/table.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -29,7 +30,15 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 @Component({
   selector: 'app-users',
-  imports: [ReactiveFormsModule,FormsModule,MatButtonModule, MatDividerModule, MatIconModule, MatFormFieldModule, MatInputModule,CommonModule,MatSnackBarModule],
+  imports: [ReactiveFormsModule,
+            FormsModule,
+            MatButtonModule, 
+            MatDividerModule, 
+            MatIconModule, 
+            MatFormFieldModule, 
+            MatInputModule,
+            CommonModule,
+            MatSnackBarModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
@@ -38,24 +47,26 @@ export class UsersComponent {
   private snackBar = inject(MatSnackBar);
   matcher = new MyErrorStateMatcher();
   profileForm = new FormGroup({
-    name : new FormControl('', [Validators.required,Validators.minLength(3)]),
+    name : new FormControl('', [Validators.required,Validators.minLength(3),Validators.pattern('^[a-zA-Z ]*$')]),
     email : new FormControl('', [Validators.required, Validators.email]),
     phoneNo : new FormControl('', [Validators.required,Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")])
   });
   
   constructor(private service: UsersService, private router: Router) { }
   handleSubmit(data: any) {
-    console.log("data", data);
-    this.service.postData(data).subscribe(() => {
-      console.log("result", data);
-      if (data) {
-        this.router.navigate(['/table']);
-          this.snackBar.open("User Created Successfully", "OK", {
+    this.service.postData(data).subscribe((userdata) => {
+      if (userdata===null) {
+          this.snackBar.open("User Already Exists  ", "OK", {
+          duration: 3000,
+          panelClass: ['red-snackbar', 'login-snackbar'],
+           });
+      }else{
+            this.router.navigate(['/table']);
+            this.snackBar.open("User Created Successfully", "OK", {
             duration: 3000,
             panelClass: ['green-snackbar', 'login-snackbar'],
            });
       }
     });
   }
-  
 }
