@@ -4,6 +4,7 @@
     <div class="col-sm-12" style="display: flex">
       <div class="col-6 m-2">
         <input
+          type="text" 
           class="form-control m-2"
           matInput
           (keyup)="applyFilter($event)"
@@ -126,13 +127,13 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
-    <mat-paginator
-    #paginatorRef
-    [pageSizeOptions]="pageNumbers"
-    showFirstLastButtons
-    aria-label="Select page of Table"
-    align-end
-    >
-  </mat-paginator>
-</div>
+  </div>
+  <mat-paginator
+  #paginatorRef
+  [pageSizeOptions]="pageNumbers"
+  showFirstLastButtons
+  aria-label="Select page of Table"
+  align-end
+  >
+</mat-paginator>
 </div>

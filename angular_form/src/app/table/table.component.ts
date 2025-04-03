@@ -64,6 +64,9 @@ export class TableComponent implements AfterViewInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  ngAfterViewInit(): void {
+    this.fetchUser(); 
+  }
   fetchUser() {
     this.apiservice.getAllData().subscribe({
       next: (data) => {
@@ -85,7 +88,6 @@ export class TableComponent implements AfterViewInit{
           this.dataSource = new MatTableDataSource(this.user_data);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          
           this.calculate();
         }
       },
@@ -102,15 +104,6 @@ export class TableComponent implements AfterViewInit{
         );
       },
     });
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  ngAfterViewInit(): void {
-    this.fetchUser();
   }
 
   edit(element: any) {
@@ -142,7 +135,7 @@ export class TableComponent implements AfterViewInit{
               this.isLoading = false;
               this._snackBar.open(
                 err.error?.message ||
-                  'An error occurred while fetching the user',
+                'An error occurred while fetching the user',
                 'OK',
                 {
                   duration: 3000,
@@ -192,6 +185,11 @@ export class TableComponent implements AfterViewInit{
       }
     });
   }
+  
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   calculate() {
     if (!this.user_data || !Array.isArray(this.user_data)) {
@@ -200,17 +198,18 @@ export class TableComponent implements AfterViewInit{
     this.pageNumbers = [5]; // Initialize with common options
     this.totalItems = Math.ceil(this.user_data.length / this.itemPerPage);
     let maxPageSize = this.user_data.length;
-    
-      for (let i = 1; i <= this.totalItems; i++) {
-        let pageSize = i * 5;
-        if (pageSize <= maxPageSize && !this.pageNumbers.includes(pageSize)) {
-          this.pageNumbers.push(pageSize);
-        }
-        if (!this.pageNumbers.includes(maxPageSize)) {
-          this.pageNumbers.push(maxPageSize);
-        }
+
+    for (let i = 1; i <= this.totalItems; i++) {
+      let pageSize = i * 5;
+      if (pageSize <= maxPageSize && !this.pageNumbers.includes(pageSize)) {
+        this.pageNumbers.push(pageSize);
       }
+      if (!this.pageNumbers.includes(maxPageSize)) {
+        this.pageNumbers.push(maxPageSize);
+      }
+    }
   }
+
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
