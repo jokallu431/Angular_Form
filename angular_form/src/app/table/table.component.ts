@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
-  OnInit,
   ViewChild,
   inject,
 } from '@angular/core';
@@ -198,7 +197,7 @@ export class TableComponent implements AfterViewInit{
     if (!this.user_data || !Array.isArray(this.user_data)) {
       return;
     }
-    this.pageNumbers = [5]; // Initialize with common options
+    this.pageNumbers = [5];
     this.totalItems = Math.ceil(this.user_data.length / this.itemPerPage);
     let maxPageSize = this.user_data.length;
 
