@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container ">
   <h2>{{ title }}</h2>
   <div class="row">
     <div class="col-sm-12" style="display: flex">
@@ -12,7 +12,7 @@
           #input
         />
       </div>
-      <div class="col-sm-6 m-2  text-end">
+      <div class="col-sm-6 m-auto  text-end">
         <button 
           mat-raised-button
           matTooltip="Home"
@@ -23,117 +23,120 @@
     </div>
     
   </div>
-  <div class="table-responsive" style="position: relative;">
-    @if(isLoading){
-      <app-loading></app-loading>
-    }
-    <div class="mat-elevation-z8" >
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        matSort
-        (matSortChange)="announceSortChange($event)"
-        class="mat-elevation-z8"
-      >
-        <!-- Name Column -->
-        <ng-container matColumnDef="SrNo">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-          >
-            Sr No.
-          </th>
-          <td mat-cell *matCellDef="let i=index">{{ (paginatorRef.pageIndex*paginatorRef.pageSize)+i+1}}</td>
-        </ng-container>
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by name"
-          >
-            Name
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-        </ng-container>
-
-        <!-- Weight Column -->
-        <ng-container matColumnDef="email">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by email"
-          >
-            Email
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-        </ng-container>
-
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="phoneNo">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by phoneNo"
-          >
-            Phone No
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element.phoneNo }}</td>
-        </ng-container>
-
-        <!-- Position Column -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>Action</th>
-          <td
-            mat-cell
-            style="display: flex; height: 54px; align-items: center"
-            *matCellDef="let element"
-          >
-            <button
-              mat-icon-button
-              matTooltip="View"
-              class="iconbutton"
-              color="primary"
-              (click)="onView(element)"
+  <div style="position: relative;">
+    <div class="table-responsive" >
+      @if(isLoading){
+        <app-loading></app-loading>
+      }
+      <div class="mat-elevation-z8" >
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+          (matSortChange)="announceSortChange($event)"
+          class="mat-elevation-z8"
+        >
+          <!-- Name Column -->
+          <ng-container matColumnDef="SrNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
             >
-              <mat-icon>visibility</mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              matTooltip="Edit"
-              class="iconbutton"
-              color="basic"
-              (click)="edit(element._id)"
-              routerLink="/edit/"
+              Sr No.
+            </th>
+            <td mat-cell *matCellDef="let i=index">{{ (paginatorRef.pageIndex*paginatorRef.pageSize)+i+1}}</td>
+          </ng-container>
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by name"
             >
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              matTooltip="Delete"
-              color="warn"
-              class="iconbutton"
-              (click)="onDelete(element)"
+              Name
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
+  
+          <!-- Weight Column -->
+          <ng-container matColumnDef="email">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by email"
             >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
+              Email
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+          </ng-container>
+  
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="phoneNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              sortActionDescription="Sort by phoneNo"
+            >
+              Phone No
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.phoneNo }}</td>
+          </ng-container>
+  
+          <!-- Position Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td
+              mat-cell
+              style="display: flex; height: 54px; align-items: center"
+              *matCellDef="let element"
+            >
+              <button
+                mat-icon-button
+                matTooltip="View"
+                class="iconbutton"
+                color="primary"
+                (click)="onView(element)"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Edit"
+                class="iconbutton"
+                color="basic"
+                (click)="edit(element._id)"
+                routerLink="/edit/"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Delete"
+                color="warn"
+                class="iconbutton"
+                (click)="onDelete(element)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
     </div>
+    <mat-paginator
+    #paginatorRef
+    [pageSizeOptions]="pageNumbers"
+    showFirstLastButtons
+    aria-label="Select page of Table"
+    align-end
+    >
+  </mat-paginator>
+
   </div>
-  <mat-paginator
-  #paginatorRef
-  [pageSizeOptions]="pageNumbers"
-  showFirstLastButtons
-  aria-label="Select page of Table"
-  align-end
-  >
-</mat-paginator>
 </div>

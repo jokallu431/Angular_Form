@@ -77,12 +77,18 @@ export class EditComponent implements OnInit {
     this.apiservice.editUser(this.userId, data).subscribe({
       next: () => {
         this.isLoading = false;
-        this._snackBar.open('User updated successfully!', 'Close', { duration: 3000, panelClass: ['green-snackbar', 'login-snackbar'], });
+        this._snackBar.open('User updated successfully!', 'Close', { 
+          duration: 3000, 
+          panelClass: ['green-snackbar', 'login-snackbar'], 
+        });
         this.router.navigate(['/table']); // Navigate back to the table page
 
       }, error: () => {
         this.isLoading = false;
-        this._snackBar.open('User updated successfully!', 'Close', { duration: 3000, panelClass: ['red-snackbar', 'login-snackbar'], });
+        this._snackBar.open('Error in updating User!', 'Close', { 
+          duration: 3000, 
+          panelClass: ['red-snackbar', 'login-snackbar'], 
+        });
       }
     });
   }
