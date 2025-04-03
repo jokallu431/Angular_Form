@@ -56,7 +56,7 @@ export class TableComponent implements AfterViewInit{
   title = 'Users Table';
   dataSource!: any;
   user_data!: userData[];
-  pageNumbers: number[] = [];
+  pageNumbers: number[] = [5];
   itemPerPage: number = 5;
   totalItems: number = 0;
   isLoading = true;
