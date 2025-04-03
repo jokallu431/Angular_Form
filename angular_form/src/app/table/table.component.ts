@@ -188,6 +188,9 @@ export class TableComponent implements AfterViewInit{
   
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filterPredicate = function (data:any,value:string) {
+      return data.name.indexOf(value)!=-1||data.phoneNo.indexOf(value)!=-1||data.email.indexOf(value)!=-1;
+   }
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
