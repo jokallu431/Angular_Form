@@ -1,4 +1,4 @@
-export const environment = {
+export const production = {
     production: true,
-    apiUrl: 'https://task-backend-zeta-eight.vercel.app/'
+    apiUrl: 'https://taskbackend-phi.vercel.app/'
 };

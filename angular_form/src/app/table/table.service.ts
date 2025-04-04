@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../enviroments/environment';
+// import { environment } from '../../enviroments/environment';
+import {production } from '../../enviroments/production';
 export interface userData{userdata:[
     name: string,
     email: string,
@@ -14,7 +15,7 @@ export interface userData{userdata:[
 })
 
 export class TableService {
-  apiUrl = environment.apiUrl+'users'
+  apiUrl = production.apiUrl+'users'
   constructor(private http: HttpClient) { }
 
   getAllData():Observable<userData[]>{
