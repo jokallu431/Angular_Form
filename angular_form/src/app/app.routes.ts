@@ -3,6 +3,11 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path:'',
+        loadComponent:()=> import ('./login/login.component').then((c)=>c.LoginComponent),
+        title:'Login_Page'
+    },
+    {
+        path:'form',
         loadComponent:()=> import ('./users/users.component').then((c)=>c.UsersComponent),
         title:'Form_Page'
     },

@@ -22,7 +22,7 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../loading/loading.component';
@@ -58,8 +58,10 @@ export class TableComponent implements AfterViewInit{
   pageNumbers: number[] = [5];
   itemPerPage: number = 5;
   totalItems: number = 0;
-  isLoading = true;
+  isLoading = false;
   displayedColumns: string[] = ['SrNo', 'name', 'email', 'phoneNo', 'action'];
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -67,32 +69,33 @@ export class TableComponent implements AfterViewInit{
     this.fetchUser(); 
   }
   fetchUser() {
+    this.isLoading=true;
     this.apiservice.getAllData().subscribe({
       next: (data) => {
-        this.isLoading = false;
-
         if (data.length <= 0) {
-          this.isLoading = true;
+          this.isLoading = false;
           this._snackBar.open('No data available', 'OK', {
             duration: 3000,
             panelClass: ['red-snackbar'],
           });
         } else {
           this.isLoading = false;
-          this._snackBar.open('Data fetched successfully', 'OK', {
-            duration: 3000,
-            panelClass: ['green-snackbar'],
-          });
           this.user_data = data;
           this.dataSource = new MatTableDataSource(this.user_data);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.calculate();
+          this._snackBar.open('Data fetched successfully', 'OK', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+            panelClass: ['green-snackbar'],
+          });
         }
       },
       error: (err) => {
         console.error('Error fetching data:', err);
-        this.isLoading = false;
+        this.isLoading = true;
         this._snackBar.open(
           'An error occurred while fetching the data. Please try again.',
           'OK',

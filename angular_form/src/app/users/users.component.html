@@ -59,6 +59,23 @@
          <mat-error>PhoneNo is <strong>required</strong></mat-error>
          }
        </mat-form-field>
+
+       <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="password"
+          [errorStateMatcher]="matcher"
+          placeholder="Ex. Pass@123"
+        />
+        @if (!profileForm.get('password')?.valid &&
+        !profileForm.get('password')?.hasError('required')) {
+        <mat-error>Please enter a valid Password</mat-error>
+        } @if (profileForm.get('password')?.hasError('required')) {
+        <mat-error>Password is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
        <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button>
      </form>
    </div> 

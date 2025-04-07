@@ -55,14 +55,19 @@ export class UsersComponent {
   profileForm = new FormGroup({
     name : new FormControl('', [Validators.required,Validators.minLength(3),Validators.pattern('^[a-zA-Z ]*$')]),
     email : new FormControl('', [Validators.required, Validators.email]),
-    phoneNo : new FormControl('', [Validators.required,Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")])
+    phoneNo : new FormControl('', [Validators.required,Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]),
+    password : new FormControl('', [Validators.required,Validators.pattern("^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$")])
   });
   
   constructor(private service: UsersService, private router: Router) { }
   handleSubmit(data: any) {
     this.isLoading = true;
+    console.log("data",data);
     this.service.postData(data).subscribe({
+
       next: (userdata) => {
+        console.log("userdata",userdata);
+        
         this.isLoading = false;
       if (userdata===null) {
           this.snackBar.open("User Already Exists  ", "OK", {
@@ -70,7 +75,7 @@ export class UsersComponent {
           panelClass: ['red-snackbar', 'login-snackbar'],
            });
       }else{
-            this.router.navigate(['/table']);
+            this.router.navigate(['']);
             this.snackBar.open("User Created Successfully", "OK", {
             duration: 3000,
             panelClass: ['green-snackbar', 'login-snackbar'],

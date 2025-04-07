@@ -1,4 +1,4 @@
 export const production = {
     production: true,
-    apiUrl: 'https://taskbackend-phi.vercel.app/'
+    apiUrl: 'https://task-backend-chi-ten.vercel.app/'
 };

@@ -1,0 +1,55 @@
+<div class="container">
+  <h1>{{ title }}</h1>
+  <div style="position: relative">
+    @if(isLoading) {
+    <app-loading></app-loading>
+    }
+    <form
+      class="example-form"
+      (ngSubmit)="handleSubmit(profileForm.value)"
+      [formGroup]="profileForm"
+    >
+     <mat-form-field class="example-full-width">
+        <mat-label>Email</mat-label>
+        <input
+          type="email"
+          matInput
+          formControlName="email"
+          [errorStateMatcher]="matcher"
+          placeholder="Ex. pat@example.com"
+        />
+        @if (!profileForm.get('email')?.valid &&
+        !profileForm.get('email')?.hasError('invalid')) {
+        <mat-error>Please enter a valid Email</mat-error>
+        } @if (profileForm.get('email')?.hasError('required')) {
+        <mat-error>Email is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="password"
+          [errorStateMatcher]="matcher"
+          placeholder="Ex. Pass@123"
+        />
+        @if (!profileForm.get('password')?.valid &&
+        !profileForm.get('password')?.hasError('required')) {
+        <mat-error>Please enter a valid Password</mat-error>
+        } @if (profileForm.get('password')?.hasError('required')) {
+        <mat-error>Password is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+      <div class="col-12" style="display: flex;">
+        <div class="col-6" style=" text-align: left ;">
+          <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button>
+        </div>
+        <div class="col-6" style="text-align:right;">
+          <a [routerLink]="['/form']" mat-raised-button>Add New</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
