@@ -16,7 +16,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { UsersService } from './users.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { TableService } from '../table/table.service';
@@ -42,7 +42,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
             CommonModule,
             MatSnackBarModule,
             MatProgressSpinnerModule,
-            LoadingComponent
+            LoadingComponent,
+            RouterLink
           ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
@@ -52,6 +53,7 @@ export class UsersComponent {
   isLoading = false;
   private snackBar = inject(MatSnackBar);
   matcher = new MyErrorStateMatcher();
+  passwordType = false;
   profileForm = new FormGroup({
     name : new FormControl('', [Validators.required,Validators.minLength(3),Validators.pattern('^[a-zA-Z ]*$')]),
     email : new FormControl('', [Validators.required, Validators.email]),
@@ -60,6 +62,9 @@ export class UsersComponent {
   });
   
   constructor(private service: UsersService, private router: Router) { }
+  togglePassword() {
+    this.passwordType =!this.passwordType;
+  }
   handleSubmit(data: any) {
     this.isLoading = true;
     console.log("data",data);

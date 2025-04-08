@@ -64,13 +64,13 @@
       matTooltip="Update User"
       >Update</button>
 
-      <button 
+      <a 
       class="m-2"
           mat-raised-button
           matTooltip="Cancel"
           color="primary" 
-          routerLink="/">Cancel
-      </button>
+          [routerLink]="['/table']">Cancel
+    </a>
     </div>
   </form>
 </div>

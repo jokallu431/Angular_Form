@@ -63,12 +63,26 @@
        <mat-form-field class="example-full-width">
         <mat-label>Password</mat-label>
         <input
-          type="text"
           matInput
+          [type]="passwordType?'text':'password'"
+          (click)="$event.stopPropagation()"
+          #passwordInput
           formControlName="password"
           [errorStateMatcher]="matcher"
           placeholder="Ex. Pass@123"
         />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="togglePassword()"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="passwordType"
+        >
+          <mat-icon>{{
+            passwordType ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
         @if (!profileForm.get('password')?.valid &&
         !profileForm.get('password')?.hasError('required')) {
         <mat-error>Please enter a valid Password</mat-error>
@@ -76,7 +90,15 @@
         <mat-error>Password is <strong>required</strong></mat-error>
         }
       </mat-form-field>
-       <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button>
+       <!-- <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button> -->
+       <div class="col-12" style="display: flex;">
+        <div class="col-6" style=" text-align: left ;">
+          <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button>
+        </div>
+        <div class="col-6" style="text-align:right;">
+          <a [routerLink]="['/']" mat-raised-button>Login</a>
+        </div>
+      </div>
      </form>
    </div> 
 

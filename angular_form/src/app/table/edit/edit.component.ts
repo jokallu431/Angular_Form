@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../users/users.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -32,7 +32,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 @Component({
   selector: 'app-edit',
-  imports: [ReactiveFormsModule, FormsModule, MatButtonModule, MatDividerModule, MatIconModule, MatFormFieldModule, MatInputModule, CommonModule, MatTooltip],
+  imports: [ReactiveFormsModule,RouterLink, FormsModule, MatButtonModule, MatDividerModule, MatIconModule, MatFormFieldModule, MatInputModule, CommonModule, MatTooltip],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.css'
 })
@@ -44,7 +44,8 @@ export class EditComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     phoneNo: new FormControl('', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")])
   });
-
+  token!: any
+  headers = { 'Authorization': `Bearer ${this.token}` }
   constructor(private service: UsersService,
     private router: Router,
     private route: ActivatedRoute,
@@ -56,11 +57,12 @@ export class EditComponent implements OnInit {
   isLoading = false;
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('id')!;
+    this.token=localStorage.getItem("tokenValue");
     this.fetchUser();
   }
 
   fetchUser() {
-    this.apiservice.viewUser(this.userId).subscribe((data) => {
+    this.apiservice.viewUser(this.userId,this.headers).subscribe((data) => {
       this.userData = data;
       //Setting Value for FormGroup
       this.profileForm.setValue({
@@ -74,7 +76,7 @@ export class EditComponent implements OnInit {
   // Update user details
   handleSubmit(data: any) {
     this.isLoading = true;
-    this.apiservice.editUser(this.userId, data).subscribe({
+    this.apiservice.editUser(this.userId, data,this.headers).subscribe({
       next: () => {
         this.isLoading = false;
         this._snackBar.open('User updated successfully!', 'Close', { 

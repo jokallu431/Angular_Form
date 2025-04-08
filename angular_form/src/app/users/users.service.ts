@@ -24,6 +24,9 @@ export class UsersService {
   }
 
   loginData(data:any) {
-    return this.http.post(this.login_apiUrl,data)
+    const result = this.http.post(this.login_apiUrl,data);
+    console.log("loginData Result",result);
+    
+    return result;
   }
 }

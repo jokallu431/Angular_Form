@@ -15,23 +15,22 @@ export interface userData{userdata:[
 })
 
 export class TableService {
-  apiUrl = environment.apiUrl+'users'
+  apiUrl = environment.apiUrl+'users';
   constructor(private http: HttpClient) { }
-
-  getAllData():Observable<userData[]>{
-   return this.http.get<userData[]>(this.apiUrl)
+  getAllData(headers:any):Observable<userData[]>{
+   return this.http.get<userData[]>(this.apiUrl,{headers})
   }
 
-  deleteUser(id:any):Observable<userData[]>{
-    return this.http.delete<userData[]>(this.apiUrl+'/'+id)
+  deleteUser(id:any,headers:any):Observable<userData[]>{
+    return this.http.delete<userData[]>(this.apiUrl+'/'+id,{headers})
    }
 
-   viewUser(id:any):Observable<userData[]>{
-     const data = this.http.get<userData[]>(this.apiUrl+'/'+id)
+   viewUser(id:any,headers:any){
+     const data = this.http.get(this.apiUrl+'/'+id,{headers})
      return data;
    }
 
-   editUser(id:any,body:any):Observable<userData[]>{
-    return this.http.patch<userData[]>(this.apiUrl+'/'+id,body)
+   editUser(id:any,body:any,headers:any):Observable<userData[]>{
+    return this.http.patch<userData[]>(this.apiUrl+'/'+id,body,{headers})
    }
 }

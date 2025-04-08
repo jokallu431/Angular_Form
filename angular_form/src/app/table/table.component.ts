@@ -59,6 +59,8 @@ export class TableComponent implements AfterViewInit{
   itemPerPage: number = 5;
   totalItems: number = 0;
   isLoading = false;
+  token!: any
+  headers = { 'Authorization': `Bearer ${this.token}` }
   displayedColumns: string[] = ['SrNo', 'name', 'email', 'phoneNo', 'action'];
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -66,12 +68,16 @@ export class TableComponent implements AfterViewInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   ngAfterViewInit(): void {
+    this.token=localStorage.getItem("tokenValue");
     this.fetchUser(); 
+  }
+  clearAll(){
+    this.token=localStorage.clear();
   }
   fetchUser() {
     this.isLoading=true;
-    this.apiservice.getAllData().subscribe({
-      next: (data) => {
+    this.apiservice.getAllData(this.headers).subscribe({
+      next: (data:any) => {
         if (data.length <= 0) {
           this.isLoading = false;
           this._snackBar.open('No data available', 'OK', {
@@ -80,7 +86,7 @@ export class TableComponent implements AfterViewInit{
           });
         } else {
           this.isLoading = false;
-          this.user_data = data;
+          this.user_data = data["userData"];
           this.dataSource = new MatTableDataSource(this.user_data);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -123,12 +129,14 @@ export class TableComponent implements AfterViewInit{
 
     this._snackBar.open('View User ', 'OK', {
       duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
       panelClass: ['green-snackbar'],
     });
     dialogRef.afterClosed().subscribe({
       next: (result) => {
         if (result === true) {
-          this.apiservice.viewUser(element._id).subscribe({
+          this.apiservice.viewUser(element._id,this.headers).subscribe({
             next: () => {
               this.fetchUser();
             },
@@ -167,7 +175,7 @@ export class TableComponent implements AfterViewInit{
     const dialogRef = this.dialog.open(ModalDialog);
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.apiservice.deleteUser(element._id).subscribe({
+        this.apiservice.deleteUser(element._id,this.headers).subscribe({
           next: () => {
             this._snackBar.open('User Deleted Successfully', 'OK', {
               duration: 3000,
@@ -176,7 +184,6 @@ export class TableComponent implements AfterViewInit{
             this.fetchUser();
           },
           error: (err) => {
-            // Handle error here
             console.error('Error deleting user:', err);
             this._snackBar.open('Failed to Delete User. Please try again later.', 'OK', {
               duration: 3000,
