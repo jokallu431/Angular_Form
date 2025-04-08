@@ -58,6 +58,7 @@ export class EditComponent implements OnInit {
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('id')!;
     this.token=localStorage.getItem("tokenValue");
+    this.headers = { 'Authorization': `Bearer ${this.token}` }
     this.fetchUser();
   }
 

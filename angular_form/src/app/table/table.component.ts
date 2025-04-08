@@ -69,7 +69,8 @@ export class TableComponent implements AfterViewInit{
   @ViewChild(MatSort) sort!: MatSort;
   ngAfterViewInit(): void {
     this.token=localStorage.getItem("tokenValue");
-    this.fetchUser(); 
+    this.headers = { 'Authorization': `Bearer ${this.token}` }
+        this.fetchUser(); 
   }
   clearAll(){
     this.token=localStorage.clear();
@@ -181,7 +182,8 @@ export class TableComponent implements AfterViewInit{
               duration: 3000,
               panelClass: ['green-snackbar', 'login-snackbar'],
             });
-            this.fetchUser();
+            localStorage.removeItem('tokenValue');
+            this.router.navigate(['/']);
           },
           error: (err) => {
             console.error('Error deleting user:', err);
