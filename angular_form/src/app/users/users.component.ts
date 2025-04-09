@@ -67,12 +67,9 @@ export class UsersComponent {
   }
   handleSubmit(data: any) {
     this.isLoading = true;
-    console.log("data",data);
     this.service.postData(data).subscribe({
 
       next: (userdata) => {
-        console.log("userdata",userdata);
-        
         this.isLoading = false;
       if (userdata===null) {
           this.snackBar.open("User Already Exists  ", "OK", {

@@ -1,5 +1,5 @@
 <div class="container ">
-  <h2>{{ title }}</h2>
+  <h1 style="color: rgb(17, 16, 16); text-align: center;"><b>{{ title }}</b></h1>
   <div class="row">
     <div class="col-sm-12" style="display: flex">
       <div class="col-6 m-2">
@@ -15,17 +15,17 @@
       <div class="col-sm-6 m-auto  text-end">
         <button 
           mat-raised-button
-          matTooltip="Home"
+          matTooltip="Logout"
           color="primary" 
           routerLink="/"
           (click)="clearAll()"
-          >Home
+          >Logout
       </button>
       </div>
     </div>
     
   </div>
-  <div style="position: relative;">
+  <div style="position: relative; margin-bottom: 15px;">
     <div class="table-responsive" >
       @if(isLoading){
         <app-loading></app-loading>
@@ -95,12 +95,14 @@
               style="display: flex; height: 54px; align-items: center"
               *matCellDef="let element"
             >
+            @if(userId!=element._id){
               <button
                 mat-icon-button
                 matTooltip="View"
                 class="iconbutton"
                 color="primary"
                 (click)="onView(element)"
+                [disabled]="false"
               >
                 <mat-icon>visibility</mat-icon>
               </button>
@@ -111,6 +113,7 @@
                 color="basic"
                 (click)="edit(element._id)"
                 routerLink="/edit/"
+                [disabled]="true"
               >
                 <mat-icon>edit</mat-icon>
               </button>
@@ -120,9 +123,43 @@
                 color="warn"
                 class="iconbutton"
                 (click)="onDelete(element)"
+                [disabled]="true"
               >
                 <mat-icon>delete</mat-icon>
               </button>
+            }@else {
+              <button
+                mat-icon-button
+                matTooltip="View"
+                class="iconbutton"
+                color="primary"
+                (click)="onView(element)"
+                [disabled]="false"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Edit"
+                class="iconbutton"
+                color="basic"
+                (click)="edit(element._id)"
+                routerLink="/edit/"
+                [disabled]="false"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Delete"
+                color="warn"
+                class="iconbutton"
+                (click)="onDelete(element)"
+                [disabled]="false"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
             </td>
           </ng-container>
   

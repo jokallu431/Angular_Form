@@ -46,8 +46,8 @@ import { LoadingComponent } from '../loading/loading.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent implements AfterViewInit{
-  constructor(private apiservice: TableService, private router: Router) {}
+export class TableComponent implements AfterViewInit {
+  constructor(private apiservice: TableService, private router: Router) { }
 
   private _liveAnnouncer = inject(LiveAnnouncer);
   private _snackBar = inject(MatSnackBar);
@@ -61,6 +61,7 @@ export class TableComponent implements AfterViewInit{
   isLoading = false;
   token!: any
   headers = { 'Authorization': `Bearer ${this.token}` }
+  userId="";
   displayedColumns: string[] = ['SrNo', 'name', 'email', 'phoneNo', 'action'];
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -68,17 +69,18 @@ export class TableComponent implements AfterViewInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   ngAfterViewInit(): void {
-    this.token=localStorage.getItem("tokenValue");
+    this.token = localStorage.getItem("tokenValue");
     this.headers = { 'Authorization': `Bearer ${this.token}` }
-        this.fetchUser(); 
+    this.fetchUser();
   }
-  clearAll(){
-    this.token=localStorage.clear();
+  clearAll() {
+    this.token = localStorage.clear();
   }
   fetchUser() {
-    this.isLoading=true;
+    this.isLoading = true;
     this.apiservice.getAllData(this.headers).subscribe({
-      next: (data:any) => {
+      next: (data: any) => {
+        this.userId=data.userId;
         if (data.length <= 0) {
           this.isLoading = false;
           this._snackBar.open('No data available', 'OK', {
@@ -92,7 +94,7 @@ export class TableComponent implements AfterViewInit{
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.calculate();
-          this._snackBar.open('Data fetched successfully', 'OK', {
+          this._snackBar.open(data.message||'Data fetched successfully', 'OK', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
@@ -101,9 +103,9 @@ export class TableComponent implements AfterViewInit{
         }
       },
       error: (err) => {
-        console.error('Error fetching data:', err);
         this.isLoading = true;
         this._snackBar.open(
+          err.error.message ||
           'An error occurred while fetching the data. Please try again.',
           'OK',
           {
@@ -137,12 +139,11 @@ export class TableComponent implements AfterViewInit{
     dialogRef.afterClosed().subscribe({
       next: (result) => {
         if (result === true) {
-          this.apiservice.viewUser(element._id,this.headers).subscribe({
+          this.apiservice.viewUser(element._id, this.headers).subscribe({
             next: () => {
               this.fetchUser();
             },
             error: (err) => {
-              console.error('Error fetching data:', err);
               this.isLoading = false;
               this._snackBar.open(
                 err.error?.message ||
@@ -157,8 +158,7 @@ export class TableComponent implements AfterViewInit{
           });
         }
       },
-      error: (err) => {
-        console.error('Error fetching data:', err);
+      error: () => {
         this.isLoading = false;
         this._snackBar.open(
           'An error occurred while fetching the data. Please try again.',
@@ -176,7 +176,7 @@ export class TableComponent implements AfterViewInit{
     const dialogRef = this.dialog.open(ModalDialog);
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.apiservice.deleteUser(element._id,this.headers).subscribe({
+        this.apiservice.deleteUser(element._id, this.headers).subscribe({
           next: () => {
             this._snackBar.open('User Deleted Successfully', 'OK', {
               duration: 3000,
@@ -186,8 +186,7 @@ export class TableComponent implements AfterViewInit{
             this.router.navigate(['/']);
           },
           error: (err) => {
-            console.error('Error deleting user:', err);
-            this._snackBar.open('Failed to Delete User. Please try again later.', 'OK', {
+            this._snackBar.open(err.error.message || 'Failed to Delete User. Please try again later.', 'OK', {
               duration: 3000,
               panelClass: ['red-snackbar', 'error-snackbar'],
             });
@@ -196,11 +195,11 @@ export class TableComponent implements AfterViewInit{
       }
     });
   }
-  
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filterPredicate = function (data:any,value:string) {
-      return data.name.indexOf(value)!=-1||data.phoneNo.indexOf(value)!=-1||data.email.indexOf(value)!=-1;
+    this.dataSource.filterPredicate = function (data: any, value: string) {
+      return data.name.indexOf(value) != -1 || data.phoneNo.indexOf(value) != -1 || data.email.indexOf(value) != -1;
     }
     this.dataSource.filter = filterValue.trim();
   }
@@ -239,7 +238,7 @@ export class TableComponent implements AfterViewInit{
   imports: [MatDialogModule, MatButtonModule, MatTooltip],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ModalDialog {}
+export class ModalDialog { }
 
 @Component({
   selector: 'app-view-user-dialog',
@@ -252,7 +251,7 @@ export class ViewModalDialog {
   constructor(
     public dialogRef: MatDialogRef<ViewModalDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
   closeDialog() {
     this.dialogRef.close();
   }

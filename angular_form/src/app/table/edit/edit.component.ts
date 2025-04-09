@@ -78,17 +78,22 @@ export class EditComponent implements OnInit {
   handleSubmit(data: any) {
     this.isLoading = true;
     this.apiservice.editUser(this.userId, data,this.headers).subscribe({
-      next: () => {
+      next: (updatedValue) => {
+        console.log("Value",updatedValue);
+        
+        // if(updatedValue.id===this.userId){
+          
+        // }
         this.isLoading = false;
         this._snackBar.open('User updated successfully!', 'Close', { 
           duration: 3000, 
           panelClass: ['green-snackbar', 'login-snackbar'], 
         });
         this.router.navigate(['/table']); // Navigate back to the table page
-
-      }, error: () => {
+        
+      }, error: (error) => {
         this.isLoading = false;
-        this._snackBar.open('Error in updating User!', 'Close', { 
+        this._snackBar.open(error.error.message||'Error in updating User!', 'Close', { 
           duration: 3000, 
           panelClass: ['red-snackbar', 'login-snackbar'], 
         });

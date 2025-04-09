@@ -1,5 +1,5 @@
 <div class="container" >
-  <h1>{{title}}</h1>
+  <h1 style="color: rgb(17, 16, 16); text-align: center;"><b>{{ title }}</b></h1>
   <div style="position: relative;">
       @if(isLoading) {
         <app-loading></app-loading>
@@ -36,7 +36,7 @@
            placeholder="Ex. pat@example.com"
          />
          @if (!profileForm.get('email')?.valid &&
-         !profileForm.get('email')?.hasError('invalid')) {
+         !profileForm.get('email')?.hasError('required')) {
          <mat-error>Please enter a valid Email</mat-error>
          } @if (profileForm.get('email')?.hasError('required')) {
          <mat-error>Email is <strong>required</strong></mat-error>
@@ -93,7 +93,11 @@
        <!-- <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button> -->
        <div class="col-12" style="display: flex;">
         <div class="col-6" style=" text-align: left ;">
-          <button [disabled]="profileForm.invalid" mat-raised-button>Submit</button>
+          @if(profileForm.invalid){
+            <button [disabled]="profileForm.invalid" mat-raised-button style="color: rgb(228, 220, 220);">Submit</button>
+          }@else {
+            <button mat-raised-button style="color: rgb(17, 17, 17);">Submit</button>
+          }
         </div>
         <div class="col-6" style="text-align:right;">
           <a [routerLink]="['/']" mat-raised-button>Login</a>
